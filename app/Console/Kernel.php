@@ -21,6 +21,11 @@ use App\Console\Commands\AdvancedExerciseAlertB;
 use App\Console\Commands\AdvancedExerciseGeoA;
 use App\Console\Commands\AdvancedExerciseTransactionA;
 use App\Console\Commands\AdvancedExerciseTransactionB;
+use App\Console\Commands\AdvancedExerciseTimeA;
+use App\Console\Commands\AdvancedExerciseTimeB;
+use App\Console\Commands\AdvancedExerciseTimeC;
+use App\Console\Commands\AdvancedExerciseTimeD;
+use App\Console\Commands\AdvancedExerciseTimeE;
 
 class Kernel extends ConsoleKernel
 {
@@ -47,6 +52,11 @@ class Kernel extends ConsoleKernel
         AdvancedExerciseGeoA::class,
         AdvancedExerciseTransactionA::class,
         AdvancedExerciseTransactionB::class,
+        AdvancedExerciseTimeA::class,
+        AdvancedExerciseTimeB::class,
+        AdvancedExerciseTimeC::class,
+        AdvancedExerciseTimeD::class,
+        AdvancedExerciseTimeE::class,
     ];
 
     /**

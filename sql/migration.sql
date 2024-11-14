@@ -314,3 +314,17 @@ COLLATE = utf8mb4_unicode_ci;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+-- -----------------------------------------------------
+-- Table `ad_moderation_locking_status`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ad_moderation_locking_status` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `ad_id` int(10) UNSIGNED NOT NULL,
+  `moderating` tinyint(1) NOT NULL DEFAULT 0,
+  `user_id` int(10) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `ad_id` (`ad_id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

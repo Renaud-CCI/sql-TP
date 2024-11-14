@@ -31,51 +31,92 @@ class AdvancedExerciseTransactionA extends Command
     {
         DB::beginTransaction();
 
+        $country = 'France';
+        $zipCode = '42510';
+        $name = 'Bresson';
+        $firstName = 'Renaud';
+        $email = 'renaud.bresson@email.com';
+        $password = 'renaudrenaud';
+        $isDraft = 0;
+        $acceptShareContactInfos = 1;
+        $title = "Recherche de foncier pour maraichage bio";
+        $aboutContent = "de la terre et de l'eau serait un plus";
+        $aboutProjectContent = "PAMPA Comestible";
+        $isBio = 1;
+        $experienceFarming = 'Bac STAE';
+        $surfaceRangeMin = 5;
+        $surfaceRangeMax = 20;
+
         try {
+
             // Enregistrement d'un utilisateur
-            $countryId = DB::table('countries')->where('name_fr_fr', 'France')->value('id');
-            $zipCodeId = DB::table('cities')->where('zip_code', '42510')->value('id');
-            
-            $userId = DB::table('users')->insertGetId([
-                'name' => 'Bresson',
-                'first_name' => 'Renaud',
-                'email' => 'renaud.bresson@email.com',
-                'password' => Hash::make('renaudrenaud'),
-                'country_id' => $countryId,
-                'zip_code_id' => $zipCodeId,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
+            $countryId = DB::table('countries')->where('name_fr_fr', $country)->value('id');
+            $zipCodeId = DB::table('cities')->where('zip_code', $zipCode)->value('id');
+
+            if (!$countryId) {
+                echo "Pays non trouvé.\n";
+                die;
+            } elseif (!$zipCodeId) {
+                echo "Code postal non trouvé.\n";
+                die;
+            }
+
+            // Créer un utilisateur
+            //Préparation
+            $insertUserQuery = "INSERT INTO users (name, first_name, email, password, country_id, zip_code_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+            // Execution
+            DB::insert($insertUserQuery, [
+                $name,
+                $firstName,
+                $email,
+                Hash::make($password),
+                $countryId,
+                $zipCodeId,
+                Carbon::now(),
+                Carbon::now(),
             ]);
 
-            // Energistrement de l'annonce
-            $adId = DB::table('ads')->insertGetId([
-                'user_admin_id' => $userId,
-                'user_pp_id' => $userId,
-                'is_draft' => 0,
-                'accept_share_contact_infos' => 1,
-                'title' => "Recherche de foncier pour maraichage bio",
-                'about_content' => "de la terre et de l'eau serait un plus",
-                'about_project_content' => "PAMPA Comestible",
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
+            // Récupération Id
+            $userId = DB::getPdo()->lastInsertId();
+
+            // Enregistrement de l'annonce
+            // Préaparation
+            $insertAdQuery = "INSERT INTO ads (user_admin_id, user_pp_id, is_draft, accept_share_contact_infos, title, about_content, about_project_content, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+            // Execution
+            DB::insert($insertAdQuery, [
+                $userId,
+                $userId,
+                $isDraft,
+                $acceptShareContactInfos,
+                $title,
+                $aboutContent,
+                $aboutProjectContent,
+                Carbon::now(),
+                Carbon::now(),
             ]);
+
+            // Récupération Id
+            $adId = DB::getPdo()->lastInsertId();
 
             // Enregistrement des détails de l'annonce
-            DB::table('land_seek_ads')->insert([
-                'ad_id' => $adId,
-                'is_bio' => 1,
-                'experience_farming' => 'Bac STAE',
-                'surface_range_min' => 5,
-                'surface_range_max' => 20,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
+            $insertLandSeekAdQuery = "INSERT INTO land_seek_ads (ad_id, is_bio, experience_farming, surface_range_min, surface_range_max, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            DB::insert($insertLandSeekAdQuery, [
+                $adId,
+                $isBio,
+                $experienceFarming,
+                $surfaceRangeMin,
+                $surfaceRangeMax,
+                Carbon::now(),
+                Carbon::now(),
             ]);
 
             DB::commit();
             echo "Annonce de recherche de foncier insérée avec succès.\n";
         } catch (\Exception $e) {
             DB::rollBack();
-            echo "Erreur lors de l'insertion de l'annonce de recherche de foncier.\n";
+            echo "Erreur lors de l'insertion de l'annonce de recherche de foncier.\n" . $e->getMessage() . "\n";
         }
     }
 }

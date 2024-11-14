@@ -29,6 +29,7 @@ class AdvancedExerciseGeoA extends Command
     {
         // Mettre l'id d'une ville donnée
         $cityId = 1;
+        $maxDistance = 20;
 
         $city = DB::table('cities')->where('id', $cityId)->first();
 
@@ -54,8 +55,6 @@ class AdvancedExerciseGeoA extends Command
 
         echo "Departure city: " . $city->name . "\n";
 
-        // Variable pour filtrer les villes par distance (km)
-        $maxDistance = 20;
         foreach ($cities as $city) {
             if ($city->distance < $maxDistance) {
                 echo "City: " . $city->name . " - Distance: " . round($city->distance, 2) . " km\n";

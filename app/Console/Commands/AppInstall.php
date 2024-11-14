@@ -41,5 +41,8 @@ class AppInstall extends Command
         app('db')->unprepared(file_get_contents(app()->basePath().'/sql/seeds/app.sql'));
         app('db')->unprepared(file_get_contents(app()->basePath().'/sql/seeds/generated.sql'));
         echo "seeds ok\n";
+
+        app('db')->unprepared(file_get_contents(app()->basePath().'/sql/procedures/create_ad.sql'));
+        echo "Create procedure 'create_ad' ok\n";
     }
 }

@@ -67,10 +67,10 @@ class AdvancedExerciseTransactionA extends Command
 
             // Créer un utilisateur
             //Préparation
-            $insertUserQuery = "INSERT INTO users (name, first_name, email, password, country_id, zip_code_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            DB::statement("PREPARE stmt1 FROM 'INSERT INTO users (name, first_name, email, password, country_id, zip_code_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'");
 
             // Execution
-            DB::insert($insertUserQuery, [
+            DB::statement("SET @name = ?, @firstName = ?, @email = ?, @password = ?, @countryId = ?, @zipCodeId = ?, @createdAt = ?, @updatedAt = ?", [
                 $name,
                 $firstName,
                 $email,
@@ -80,16 +80,18 @@ class AdvancedExerciseTransactionA extends Command
                 Carbon::now(),
                 Carbon::now(),
             ]);
+            DB::statement("EXECUTE stmt1 USING @name, @firstName, @email, @password, @countryId, @zipCodeId, @createdAt, @updatedAt");
+            DB::statement("DEALLOCATE PREPARE stmt1");
 
             // Récupération Id
-            $userId = DB::getPdo()->lastInsertId();
+            $userId = DB::table('users')->where('email', $email)->value('id');
 
             // Enregistrement de l'annonce
             // Préaparation
-            $insertAdQuery = "INSERT INTO ads (user_admin_id, user_pp_id, is_draft, accept_share_contact_infos, title, about_content, about_project_content, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            DB::statement("PREPARE stmt2 FROM 'INSERT INTO ads (user_admin_id, user_pp_id, is_draft, accept_share_contact_infos, title, about_content, about_project_content, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'");
 
             // Execution
-            DB::insert($insertAdQuery, [
+            DB::statement("SET @userAdminId = ?, @userPpId = ?, @isDraft = ?, @acceptShareContactInfos = ?, @title = ?, @aboutContent = ?, @aboutProjectContent = ?, @createdAt = ?, @updatedAt = ?", [
                 $userId,
                 $userId,
                 $isDraft,
@@ -100,13 +102,15 @@ class AdvancedExerciseTransactionA extends Command
                 Carbon::now(),
                 Carbon::now(),
             ]);
+            DB::statement("EXECUTE stmt2 USING @userAdminId, @userPpId, @isDraft, @acceptShareContactInfos, @title, @aboutContent, @aboutProjectContent, @createdAt, @updatedAt");
+            DB::statement("DEALLOCATE PREPARE stmt2");
 
             // Récupération Id
-            $adId = DB::getPdo()->lastInsertId();
+            $adId = DB::table('ads')->where('user_pp_id', $userId)->orderBy('created_at', 'desc')->value('id');
 
             // Enregistrement des détails de l'annonce
-            $insertLandSeekAdQuery = "INSERT INTO land_seek_ads (ad_id, is_bio, experience_farming, surface_range_min, surface_range_max, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?)";
-            DB::insert($insertLandSeekAdQuery, [
+            DB::statement("PREPARE stmt3 FROM 'INSERT INTO land_seek_ads (ad_id, is_bio, experience_farming, surface_range_min, surface_range_max, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?)'");
+            DB::statement("SET @adId = ?, @isBio = ?, @experienceFarming = ?, @surfaceRangeMin = ?, @surfaceRangeMax = ?, @createdAt = ?, @updatedAt = ?", [
                 $adId,
                 $isBio,
                 $experienceFarming,
@@ -115,10 +119,11 @@ class AdvancedExerciseTransactionA extends Command
                 Carbon::now(),
                 Carbon::now(),
             ]);
+            DB::statement("EXECUTE stmt3 USING @adId, @isBio, @experienceFarming, @surfaceRangeMin, @surfaceRangeMax, @createdAt, @updatedAt");
 
             // Enregistrement du document
-            $insertDocumentQuery = "INSERT INTO documents (name, path, type, size, user_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?)";
-            DB::insert($insertDocumentQuery, [
+            DB::statement("PREPARE stmt4 FROM 'INSERT INTO documents (name, path, type, size, user_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?)'");
+            DB::statement("SET @documentName = ?, @documentPath = ?, @documentType = ?, @documentSize = ?, @userId = ?, @createdAt = ?, @updatedAt = ?", [
                 $documentName,
                 $documentPath,
                 $documentType,
@@ -127,20 +132,21 @@ class AdvancedExerciseTransactionA extends Command
                 Carbon::now(),
                 Carbon::now(),
             ]);
+            DB::statement("EXECUTE stmt4 USING @documentName, @documentPath, @documentType, @documentSize, @userId, @createdAt, @updatedAt");
 
             // Récupérer l'ID du document inséré
-            $documentId = DB::getPdo()->lastInsertId();
+            $documentId = DB::table('documents')->where('name', $documentName)->orderBy('created_at', 'desc')->value('id');
 
             // Enregistrement dans la table documentables
-            $insertDocumentableQuery = "INSERT INTO documentables (document_id, documentable_id, documentable_type, created_at, updated_at) VALUES (?, ?, ?, ?, ?)";
-            DB::insert($insertDocumentableQuery, [
+            DB::statement("PREPARE stmt5 FROM 'INSERT INTO documentables (document_id, documentable_id, documentable_type, created_at, updated_at) VALUES (?, ?, ?, ?, ?)'");
+            DB::statement("SET @documentId = ?, @adId = ?, @documentableType = 'ads', @createdAt = ?, @updatedAt = ?", [
                 $documentId,
                 $adId,
-                'ads',
                 Carbon::now(),
                 Carbon::now(),
             ]);
-
+            DB::statement("EXECUTE stmt5 USING @documentId, @adId, @documentableType, @createdAt, @updatedAt");
+            DB::statement("DEALLOCATE PREPARE stmt5");
 
             DB::commit();
             echo "Annonce de recherche de foncier insérée avec succès.\n";

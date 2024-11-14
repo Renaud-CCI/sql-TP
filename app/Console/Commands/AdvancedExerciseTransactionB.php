@@ -43,18 +43,35 @@ class AdvancedExerciseTransactionB extends Command
 
                 if ($adId) {
                     // Supprimer les entités enfants
-                    DB::table('land_seek_ads')->where('ad_id', $adId)->delete();
+                    DB::statement("PREPARE stmt1 FROM 'DELETE FROM land_seek_ads WHERE ad_id = ?'");
+                    DB::statement("SET @adId = ?", [$adId]);
+                    DB::statement("EXECUTE stmt1 USING @adId");
+                    DB::statement("DEALLOCATE PREPARE stmt1");
+
                     // Supprimer les documents associés
                     $documentIds = DB::table('documentables')
                         ->where('documentable_id', $adId)
                         ->where('documentable_type', 'ads')
                         ->pluck('document_id');
 
-                    DB::table('documents')->whereIn('id', $documentIds)->delete();
-                    DB::table('documentables')->where('documentable_id', $adId)->where('documentable_type', 'ads')->delete();
-                    // Supprimer l'annonce
-                    DB::table('ads')->where('id', $adId)->delete();
+                    DB::statement("PREPARE stmt2 FROM 'DELETE FROM documents WHERE id = ?'");
+                    foreach ($documentIds as $documentId) {
+                        DB::statement("SET @documentId = ?", [$documentId]);
+                        DB::statement("EXECUTE stmt2 USING @documentId");
+                    }
+                    DB::statement("DEALLOCATE PREPARE stmt2");
 
+                    DB::statement("PREPARE stmt3 FROM 'DELETE FROM documentables WHERE documentable_id = ? AND documentable_type = ?'");
+                    DB::statement("SET @adId = ?, @documentableType = 'ads'", [$adId]);
+                    DB::statement("EXECUTE stmt3 USING @adId, @documentableType");
+                    DB::statement("DEALLOCATE PREPARE stmt3");
+
+                    // Supprimer l'annonce
+                    DB::statement("PREPARE stmt4 FROM 'DELETE FROM ads WHERE id = ?'");
+                    DB::statement("SET @adId = ?", [$adId]);
+                    DB::statement("EXECUTE stmt4 USING @adId");
+                    DB::statement("DEALLOCATE PREPARE stmt4");
+                    
                     DB::commit();
                     echo "Annonce et entités enfants supprimées.\n";
                 } else {

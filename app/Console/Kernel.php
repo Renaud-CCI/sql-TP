@@ -26,6 +26,7 @@ use App\Console\Commands\AdvancedExerciseTimeB;
 use App\Console\Commands\AdvancedExerciseTimeC;
 use App\Console\Commands\AdvancedExerciseTimeD;
 use App\Console\Commands\AdvancedExerciseTimeE;
+use App\Console\Commands\AdvancedExerciseCreateProcedure;
 
 class Kernel extends ConsoleKernel
 {
@@ -57,6 +58,7 @@ class Kernel extends ConsoleKernel
         AdvancedExerciseTimeC::class,
         AdvancedExerciseTimeD::class,
         AdvancedExerciseTimeE::class,
+        AdvancedExerciseCreateProcedure::class,
     ];
 
     /**

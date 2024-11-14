@@ -46,6 +46,10 @@ class AdvancedExerciseTransactionA extends Command
         $experienceFarming = 'Bac STAE';
         $surfaceRangeMin = 5;
         $surfaceRangeMax = 20;
+        $documentName = 'image.jpg';
+        $documentPath = 'users/' . $documentName;
+        $documentType = $this->getDocumentType($documentName);
+        $documentSize = 9999999;
 
         try {
 
@@ -112,11 +116,79 @@ class AdvancedExerciseTransactionA extends Command
                 Carbon::now(),
             ]);
 
+            // Enregistrement du document
+            $insertDocumentQuery = "INSERT INTO documents (name, path, type, size, user_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            DB::insert($insertDocumentQuery, [
+                $documentName,
+                $documentPath,
+                $documentType,
+                $documentSize,
+                $userId,
+                Carbon::now(),
+                Carbon::now(),
+            ]);
+
+            // Récupérer l'ID du document inséré
+            $documentId = DB::getPdo()->lastInsertId();
+
+            // Enregistrement dans la table documentables
+            $insertDocumentableQuery = "INSERT INTO documentables (document_id, documentable_id, documentable_type, created_at, updated_at) VALUES (?, ?, ?, ?, ?)";
+            DB::insert($insertDocumentableQuery, [
+                $documentId,
+                $adId,
+                'ads',
+                Carbon::now(),
+                Carbon::now(),
+            ]);
+
+
             DB::commit();
             echo "Annonce de recherche de foncier insérée avec succès.\n";
         } catch (\Exception $e) {
             DB::rollBack();
             echo "Erreur lors de l'insertion de l'annonce de recherche de foncier.\n" . $e->getMessage() . "\n";
+        }
+    }
+
+    private function getDocumentType($documentName)
+    {
+        $extension = pathinfo($documentName, PATHINFO_EXTENSION);
+        switch (strtolower($extension)) {
+            case 'jpg':
+            case 'jpeg':
+                return 'image/jpeg';
+            case 'png':
+                return 'image/png';
+            case 'gif':
+                return 'image/gif';
+            case 'pdf':
+                return 'application/pdf';
+            case 'doc':
+                return 'application/msword';
+            case 'docx':
+                return 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+            case 'xls':
+                return 'application/vnd.ms-excel';
+            case 'xlsx':
+                return 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+            case 'txt':
+                return 'text/plain';
+            case 'html':
+                return 'text/html';
+            case 'mp3':
+                return 'audio/mpeg';
+            case 'wav':
+                return 'audio/wav';
+            case 'mp4':
+                return 'video/mp4';
+            case 'avi':
+                return 'video/x-msvideo';
+            case 'zip':
+                return 'application/zip';
+            case 'tar':
+                return 'application/x-tar';
+            default:
+                return 'application/octet-stream';
         }
     }
 }

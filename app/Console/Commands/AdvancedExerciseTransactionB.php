@@ -44,6 +44,14 @@ class AdvancedExerciseTransactionB extends Command
                 if ($adId) {
                     // Supprimer les entités enfants
                     DB::table('land_seek_ads')->where('ad_id', $adId)->delete();
+                    // Supprimer les documents associés
+                    $documentIds = DB::table('documentables')
+                        ->where('documentable_id', $adId)
+                        ->where('documentable_type', 'ads')
+                        ->pluck('document_id');
+
+                    DB::table('documents')->whereIn('id', $documentIds)->delete();
+                    DB::table('documentables')->where('documentable_id', $adId)->where('documentable_type', 'ads')->delete();
                     // Supprimer l'annonce
                     DB::table('ads')->where('id', $adId)->delete();
 

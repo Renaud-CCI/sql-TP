@@ -1,0 +1,15 @@
+INSERT INTO `production_genres` (`id`,`name`, `parent_id`, `created_at`, `updated_at`) VALUES (16, 'Maraîchage', NULL, '2020-02-28 04:52:47', '2020-02-28 04:52:47');
+INSERT INTO `production_genres` (`id`,`name`, `parent_id`, `created_at`, `updated_at`) VALUES (17, 'Autres petites cultures (PPAM, petits fruits)', NULL, '2020-02-28 04:52:47', '2020-02-28 04:52:47');
+INSERT INTO `production_genres` (`id`,`name`, `parent_id`, `created_at`, `updated_at`) VALUES (18, 'Arboriculture', NULL, '2020-02-28 04:52:47', '2020-02-28 04:52:47');
+INSERT INTO `production_genres` (`id`,`name`, `parent_id`, `created_at`, `updated_at`) VALUES (19, 'Cérales et légumineuses', NULL, '2020-02-28 04:52:47', '2020-02-28 04:52:47');
+INSERT INTO `production_genres` (`id`,`name`, `parent_id`, `created_at`, `updated_at`) VALUES (20, 'Viticulture', NULL, '2020-02-28 04:52:47', '2020-02-28 04:52:47');
+INSERT INTO `production_genres` (`id`,`name`, `parent_id`, `created_at`, `updated_at`) VALUES (21, 'Paysan boulanger / paysan brasseur', NULL, '2020-02-28 04:52:47', '2020-02-28 04:52:47');
+INSERT INTO `production_genres` (`id`,`name`, `parent_id`, `created_at`, `updated_at`) VALUES (22, 'Autres productions végétales', NULL, '2020-02-28 04:52:47', '2020-02-28 04:52:47');
+INSERT INTO `production_genres` (`id`,`name`, `parent_id`, `created_at`, `updated_at`) VALUES (23, 'Apiculture', NULL, '2020-02-28 04:52:47', '2020-02-28 04:52:47');
+INSERT INTO `production_genres` (`id`,`name`, `parent_id`, `created_at`, `updated_at`) VALUES (24, 'Elevage', NULL, '2020-02-28 04:52:47', '2020-02-28 04:52:47');
+INSERT INTO `production_genres` (`id`,`name`, `parent_id`, `created_at`, `updated_at`) VALUES (25, 'Gros ruminants - Bovins (lait ou viande)', 24, '2020-02-28 04:52:47', '2020-02-28 04:52:47');
+INSERT INTO `production_genres` (`id`,`name`, `parent_id`, `created_at`, `updated_at`) VALUES (26, 'Petits ruminants - caprins ou ovins (lait ou viande)', 24, '2020-02-28 04:52:47', '2020-02-28 04:52:47');
+INSERT INTO `production_genres` (`id`,`name`, `parent_id`, `created_at`, `updated_at`) VALUES (27, 'Volailles (oeuf ou chair)', 24, '2020-02-28 04:52:47', '2020-02-28 04:52:47');
+INSERT INTO `production_genres` (`id`,`name`, `parent_id`, `created_at`, `updated_at`) VALUES (28, 'Porcin', 24, '2020-02-28 04:52:47', '2020-02-28 04:52:47');
+INSERT INTO `production_genres` (`id`,`name`, `parent_id`, `created_at`, `updated_at`) VALUES (29, 'Petits animaux (lapins, escargots, poissons)', 24, '2020-02-28 04:52:47', '2020-02-28 04:52:47');
+INSERT INTO `production_genres` (`id`,`name`, `parent_id`, `created_at`, `updated_at`) VALUES (30, 'Autres (chevaux, ...)', 24, '2020-02-28 04:52:47', '2020-02-28 04:52:47');

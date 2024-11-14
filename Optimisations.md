@@ -1,0 +1,3 @@
+- Remplacer users.zip_code_id par users.city_id
+- Enlever ads.user_admin_id
+- Faire One-To-One entre ads et land_offer_ads et land_seek_ads

@@ -44,5 +44,6 @@ class AppInstall extends Command
 
         $this->call('create:procedure_create_ad');
         $this->call('create:ads_history_triggers');
+        $this->call('create:ads_seek_ads_view');
     }
 }

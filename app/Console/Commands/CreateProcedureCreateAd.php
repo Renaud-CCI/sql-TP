@@ -33,7 +33,7 @@ class CreateProcedureCreateAd extends Command
 
             if (empty($exists)) {
                 // Exécuter le fichier SQL pour créer la procédure stockée
-                DB::unprepared(file_get_contents(database_path('sql/procedures/create_ad.sql')));
+                DB::unprepared(file_get_contents('sql/procedures/create_ad.sql'));
                 echo "Procédure stockée 'create_ad' créée avec succès.\n";
             } else {
                 echo "Procédure stockée 'create_ad' existe déjà.\n";

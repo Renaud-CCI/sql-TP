@@ -328,3 +328,23 @@ CREATE TABLE IF NOT EXISTS `ad_moderation_locking_status` (
   KEY `ad_id` (`ad_id`),
   KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+-- -----------------------------------------------------
+-- Table `ads_history`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS`ads_history` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `ad_id` int(10) UNSIGNED NOT NULL,
+  `user_admin_id` int(10) UNSIGNED DEFAULT NULL,
+  `user_pp_id` int(10) UNSIGNED NOT NULL,
+  `is_draft` tinyint(1) NOT NULL,
+  `accept_share_contact_infos` tinyint(1) NOT NULL DEFAULT 0,
+  `title` varchar(255) DEFAULT NULL,
+  `about_content` varchar(1000) DEFAULT NULL,
+  `about_project_content` varchar(1000) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `modified_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

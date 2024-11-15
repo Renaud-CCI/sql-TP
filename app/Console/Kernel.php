@@ -27,6 +27,8 @@ use App\Console\Commands\AdvancedExerciseTimeC;
 use App\Console\Commands\AdvancedExerciseTimeD;
 use App\Console\Commands\AdvancedExerciseTimeE;
 use App\Console\Commands\AdvancedExerciseCreateProcedure;
+use App\Console\Commands\CreateAdsHistoryTriggers;
+use App\Console\Commands\CreateProcedureCreateAd;
 
 class Kernel extends ConsoleKernel
 {
@@ -59,6 +61,8 @@ class Kernel extends ConsoleKernel
         AdvancedExerciseTimeD::class,
         AdvancedExerciseTimeE::class,
         AdvancedExerciseCreateProcedure::class,
+        CreateAdsHistoryTriggers::class,
+        CreateProcedureCreateAd::class,
     ];
 
     /**

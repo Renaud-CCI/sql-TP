@@ -27,7 +27,7 @@ class AdvancedExerciseGeoA extends Command
      */
     public function handle()
     {
-        // Mettre l'id d'une ville donnée
+        // Mettre l'id d'une ville donnée + distance
         $cityId = 1;
         $maxDistance = 20;
 

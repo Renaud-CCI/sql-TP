@@ -49,12 +49,12 @@ class AdvancedExerciseAlertA extends Command
             ->join('departments as offerer_departments', 'offerer_cities.department_code', '=', 'offerer_departments.code')
             ->join('regions as offerer_regions', 'offerer_departments.region_code', '=', 'offerer_regions.code')
             ->whereColumn('seeker_regions.code', 'offerer_regions.code')
-            ->select('seeker_users.name as seeker_name', 'offerer_users.name as offerer_name', 'seeker_regions.name as region_name', 'seeker_productions.name as production_name')
+            ->select('seeker_users.name as seeker_name', 'seeker_users.id as seeker_id', 'offerer_users.id as offerer_id', 'offerer_users.name as offerer_name', 'seeker_regions.name as region_name', 'seeker_productions.name as production_name', 'offerer_ads.id as offerer_ad_id', 'seeker_ads.id as seeker_ad_id')
             ->distinct()
             ->get();
 
         foreach ($results as $result) {
-            echo "Seeker: " . $result->seeker_name . " - Offerer: " . $result->offerer_name . " - Region: " . $result->region_name . " - Production: " . $result->production_name . "\n";
+            echo "Seeker: " . $result->seeker_id . " - Offerer: " . $result->offerer_id . " - Region: " . $result->region_name . " - Production: " . $result->production_name . " - Offerer Ad Id: " . $result->offerer_ad_id . " - Seeker Ad Id: " . $result->seeker_ad_id . "\n";
         }
     }
 }
